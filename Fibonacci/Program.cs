@@ -1,7 +1,6 @@
 ﻿namespace Fibonacci
 {
     using System.Runtime.InteropServices;
-    using static System.Runtime.InteropServices.JavaScript.JSType;
 
     namespace Fibonacci
     {
@@ -26,6 +25,8 @@
             }
             static void Main(string[] args)
             {
+                ThreadPool.SetMaxThreads(100, 100);
+                ThreadPool.SetMinThreads(5, 5);
                 while (true)
                 {
                     string? user_input = "";
@@ -51,8 +52,7 @@
                     }
                     try
                     {
-                        Thread t1 = new Thread(() => FibonacciCalculation(input_converted));
-                        t1.Start();
+                        ThreadPool.QueueUserWorkItem(state => FibonacciCalculation(input_converted));
                     }
                     catch (OverflowException oex)
                     {
